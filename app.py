@@ -1,65 +1,40 @@
-
-from flask import Flask, render_template, request, redirect, url_for, flash
-import json, os
-from datetime import datetime, timedelta
+from flask import Flask, request, render_template, jsonify
+import json
+import datetime
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
 
-DB_FILE = "license_db.json"
-
-def load_db():
-    if not os.path.exists(DB_FILE):
+# Load license data from JSON
+def load_license_data():
+    try:
+        with open('license_db.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
         return {}
-    with open(DB_FILE, "r") as f:
-        return json.load(f)
 
-def save_db(data):
-    with open(DB_FILE, "w") as f:
+# Save license data to JSON
+def save_license_data(data):
+    with open('license_db.json', 'w') as f:
         json.dump(data, f, indent=4)
 
-@app.route("/")
+@app.route('/')
 def index():
-    db = load_db()
-    return render_template("index.html", db=db)
+    return render_template('index.html')
 
-@app.route("/add", methods=["POST"])
-def add():
-    key = request.form["key"]
-    days = int(request.form["days"])
-    db = load_db()
-    db[key] = {
-        "created_at": datetime.now().isoformat(),
-        "expires_at": (datetime.now() + timedelta(days=days)).isoformat()
-    }
-    save_db(db)
-    flash("Lisensi berhasil ditambahkan!", "success")
-    return redirect(url_for("index"))
+@app.route('/verify', methods=['POST'])
+def verify():
+    key = request.form.get('key')
+    data = load_license_data()
 
-@app.route("/delete/<key>")
-def delete(key):
-    db = load_db()
-    if key in db:
-        db.pop(key)
-        save_db(db)
-        flash("Lisensi dihapus.", "info")
-    return redirect(url_for("index"))
+    if key in data:
+        license_info = data[key]
+        expiration_date = datetime.datetime.strptime(license_info['expires'], "%Y-%m-%d")
+        if datetime.datetime.now() < expiration_date:
+            return jsonify({"status": "valid", "message": "License is active."})
+        else:
+            return jsonify({"status": "expired", "message": "License has expired."})
+    else:
+        return jsonify({"status": "invalid", "message": "License key not found."})
 
-@app.route("/verify/<key>")
-def verify(key):
-    db = load_db()
-    data = db.get(key)
-    if not data:
-        return {"status": "invalid"}, 404
-    if datetime.fromisoformat(data["expires_at"]) < datetime.now():
-        return {"status": "expired"}
-    return {"status": "valid"}
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-import os
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
