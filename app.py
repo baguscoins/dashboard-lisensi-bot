@@ -1,40 +1,26 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, render_template
 import json
-import datetime
+import os
 
 app = Flask(__name__)
 
-# Load license data from JSON
-def load_license_data():
-    try:
-        with open('license_db.json', 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
+LICENSE_DB_FILE = 'license_db.json'
 
-# Save license data to JSON
-def save_license_data(data):
-    with open('license_db.json', 'w') as f:
-        json.dump(data, f, indent=4)
+# Pastikan file JSON tidak error saat dibaca
+def load_licenses():
+    try:
+        if not os.path.exists(LICENSE_DB_FILE):
+            return {}
+        with open(LICENSE_DB_FILE, 'r') as file:
+            return json.load(file)
+    except Exception as e:
+        print(f"Error loading license file: {e}")
+        return {}
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
-@app.route('/verify', methods=['POST'])
-def verify():
-    key = request.form.get('key')
-    data = load_license_data()
-
-    if key in data:
-        license_info = data[key]
-        expiration_date = datetime.datetime.strptime(license_info['expires'], "%Y-%m-%d")
-        if datetime.datetime.now() < expiration_date:
-            return jsonify({"status": "valid", "message": "License is active."})
-        else:
-            return jsonify({"status": "expired", "message": "License has expired."})
-    else:
-        return jsonify({"status": "invalid", "message": "License key not found."})
+    licenses = load_licenses()
+    return render_template('index.html', licenses=licenses)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
