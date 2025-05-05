@@ -1,16 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify
 import json
+import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    try:
-        with open('license_db.json', 'r') as file:
-            data = json.load(file)
-        return render_template('index.html', data=data)
-    except Exception as e:
-        return f"Error loading data: {str(e)}", 500
+# Load database saat startup
+try:
+    with open("license_db.json", "r") as file:
+        db = json.load(file)
+except Exception as e:
+    db = None
+    print("Failed to load license_db.json:", e)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+@app.route("/")
+def home():
+    if db is None:
+        return "Error loading data: 'db' is undefined"
+    return jsonify(db)
+
+if __name__ == "__main__":
+    app.run(debug=True)
