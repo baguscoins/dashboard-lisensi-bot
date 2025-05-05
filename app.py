@@ -1,6 +1,5 @@
-from flask import Flask, jsonify
-import json
-import os
+from flask import Flask, render_template
+import json, os
 
 app = Flask(__name__)
 
@@ -9,15 +8,13 @@ def load_db():
         with open("license_db.json", "r") as f:
             return json.load(f)
     except Exception as e:
-        print("Error loading license_db.json:", e)
-        return None
+        print("Gagal membaca database:", e)
+        return {"licenses": []}
 
 @app.route("/")
 def index():
     db = load_db()
-    if db is None:
-        return "Error loading data: 'db' is undefined"
-    return jsonify(db)
+    return render_template("index.html", licenses=db["licenses"])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
