@@ -113,27 +113,56 @@ def daftar_reseller():
 
 @app.route('/login-reseller', methods=['GET', 'POST'])
 def login_reseller():
+    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         db = load_resellers()
         for user in db['resellers']:
-            if (user['username'] == username or user['email'] == username) and check_password_hash(user['password'], password):
-                session['reseller'] = {
-                    "nama": user['nama'],
-                    "username": user['username'],
-                    "email": user['email'],
-                    "tanggal_daftar": user['tanggal_daftar']
-                }
-                return redirect(url_for('profil_reseller'))
-        return "Login gagal, periksa kembali akun Anda."
-    return render_template('login_reseller.html')
+            if user['username'] == username or user['email'] == username:
+                if check_password_hash(user['password'], password):
+                    session['reseller'] = {
+                        "nama": user['nama'],
+                        "username": user['username'],
+                        "email": user['email'],
+                        "tanggal_daftar": user['tanggal_daftar']
+                    }
+                    return redirect(url_for('profil_reseller'))
+                else:
+                    error = "Password salah."
+                    break
+        else:
+            error = "Akun tidak ditemukan."
+    return render_template('login_reseller.html', error=error)
 
-@app.route('/profil-reseller')
+@app.route('/profil-reseller', methods=['GET', 'POST'])
 def profil_reseller():
     if 'reseller' not in session:
         return redirect(url_for('login_reseller'))
-    return render_template('profil_reseller.html', user=session['reseller'])
+    db = load_resellers()
+    user = session['reseller']
+    success, error = None, None
+    if request.method == 'POST':
+        action = request.form.get('action')
+        for r in db['resellers']:
+            if r['username'] == user['username']:
+                if action == "update":
+                    r['nama'] = request.form['nama']
+                    r['username'] = request.form['username']
+                    r['email'] = request.form['email']
+                    success = "Profil berhasil diperbarui."
+                    session['reseller'] = r
+                elif action == "reset_password":
+                    new_pw = request.form['new_password']
+                    confirm_pw = request.form['confirm_password']
+                    if new_pw == confirm_pw:
+                        r['password'] = generate_password_hash(new_pw)
+                        success = "Password berhasil diubah."
+                    else:
+                        error = "Password tidak cocok."
+                break
+        save_resellers(db)
+    return render_template('profil_reseller.html', user=session['reseller'], success=success, error=error)
 
 @app.route('/logout-reseller')
 def logout_reseller():
