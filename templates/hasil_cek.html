@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hasil Cek</title>
+    <link rel="stylesheet" href="/static/style-dashboard.css">
+</head>
+<body>
+<nav>
+  <h1>Bot License</h1>
+  <div>
+    <a href="/">Home</a>
+    <a href="/cek-lisensi">Cek Lagi</a>
+  </div>
+</nav>
+<div class="container">
+    <h2>Hasil Cek Lisensi</h2>
+    <p>Kode: {{ kode }}</p>
+    <p>Status: {{ status }}</p>
+    {% if expired %}
+    <p>Expired: {{ expired }}</p>
+    <p>Owner: {{ owner }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

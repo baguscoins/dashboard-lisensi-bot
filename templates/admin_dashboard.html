@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="/static/style-dashboard.css">
+</head>
+<body>
+<nav>
+  <h1>Admin Panel</h1>
+  <div>
+    <a href="/">Home</a>
+    <a href="/logout" class="logout">Logout</a>
+  </div>
+</nav>
+<div class="container">
+    <h2>Tambah / Edit Lisensi</h2>
+    <form method="POST">
+        <input type="text" name="kode" placeholder="Kode Lisensi" required>
+        <input type="text" name="owner" placeholder="Nama Owner" required>
+        <input type="date" name="expired" required>
+        <button type="submit">Simpan</button>
+    </form>
+
+    <h2>Daftar Lisensi</h2>
+    <ul>
+    {% for kode, data in licenses.items() %}
+        <li><strong>{{ kode }}</strong> <span>{{ data.owner }} - Exp: {{ data.expired }}</span></li>
+    {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
