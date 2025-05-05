@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 app = Flask(__name__)
-app.secret_key = 'sUp3r$3cr3t_k3y_2025!!'
+app.secret_key = 'your_secret_key'
 DB_FILE = 'license_db.json'
 ADMIN_USER = 'admin'
 ADMIN_PASS = 'admin123'
@@ -72,4 +72,5 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
