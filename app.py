@@ -4,19 +4,23 @@ import os
 
 app = Flask(__name__)
 
-# Load database saat startup
-try:
-    with open("license_db.json", "r") as file:
-        db = json.load(file)
-except Exception as e:
-    db = None
-    print("Failed to load license_db.json:", e)
+# Load database
+def load_db():
+    try:
+        with open("license_db.json", "r") as f:
+            return json.load(f)
+    except Exception as e:
+        print("Gagal load license_db.json:", e)
+        return None
+
+db = load_db()
 
 @app.route("/")
-def home():
+def index():
     if db is None:
         return "Error loading data: 'db' is undefined"
     return jsonify(db)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
