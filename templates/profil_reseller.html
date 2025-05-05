@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profil Reseller</title>
+  <link rel="stylesheet" href="/static/style-merged-responsive.css" />
+  <style>
+    .box { max-width: 600px; margin: 40px auto; background: #1e1e1e; padding: 30px; border-radius: 10px; }
+    .box h2 { color: #00ffd5; text-align: center; margin-bottom: 20px; }
+    .box label { display: block; margin-top: 10px; color: #ccc; }
+    .box input, .box button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: none; }
+    .box input { background: #2a2a2a; color: #fff; }
+    .box button { background: #00ffd5; color: #000; font-weight: bold; margin-top: 15px; }
+    .box button:hover { background: #00c3a0; }
+    .success-msg { background: #003300; color: #90ee90; padding: 10px; margin-bottom: 15px; border-radius: 6px; }
+    .danger { background: #440000; color: #ffaaaa; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Profil Reseller</h2>
+    {% if success %}<div class="success-msg">{{ success }}</div>{% endif %}
+    {% if error %}<div class="success-msg danger">{{ error }}</div>{% endif %}
+    <form method="POST" action="/profil-reseller">
+      <label>Nama Lengkap</label>
+      <input type="text" name="nama" value="{{ user.nama }}" required>
+
+      <label>Username</label>
+      <input type="text" name="username" value="{{ user.username }}" required>
+
+      <label>Email</label>
+      <input type="email" name="email" value="{{ user.email }}" required>
+
+      <button type="submit" name="action" value="update">Update Profil</button>
+    </form>
+    <hr style="margin: 30px 0; border: 1px solid #444;">
+    <h3 style="color:#00ffd5;">Ganti Password</h3>
+    <form method="POST" action="/profil-reseller">
+      <label>Password Baru</label>
+      <input type="password" name="new_password" required>
+      <label>Ulangi Password Baru</label>
+      <input type="password" name="confirm_password" required>
+      <button type="submit" name="action" value="reset_password">Reset Password</button>
+    </form>
+    <hr style="margin: 30px 0; border: 1px solid #444;">
+    <h3 style="color:#00ffd5;">Dashboard Transaksi</h3>
+    <ul style="list-style: none; padding-left: 0;">
+      <li>- Belum ada transaksi. (Dummy data)</li>
+    </ul>
+    <br>
+    <a href="/logout-reseller" style="color:#00ffd5;">Logout</a>
+  </div>
+</body>
+</html>
