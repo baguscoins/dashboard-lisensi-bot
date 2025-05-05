@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Lisensi</title>
+</head>
+<body>
+    <h1>Dashboard Lisensi</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li><strong>{{ category.title() }}:</strong> {{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form action="/add" method="post">
+        <input type="text" name="key" placeholder="License Key" required>
+        <input type="number" name="days" placeholder="Durasi (hari)" required>
+        <button type="submit">Tambah</button>
+    </form>
+    <hr>
+    <h2>Daftar Lisensi</h2>
+    <ul>
+    {% for key, info in db.items() %}
+        <li>
+            <strong>{{ key }}</strong> — Exp: {{ info.expires_at }}
+            [<a href="/delete/{{ key }}">Hapus</a>]
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
