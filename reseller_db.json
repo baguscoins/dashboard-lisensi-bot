@@ -1,0 +1,11 @@
+{
+  "resellers": [
+    {
+      "username": "caka123",
+      "email": "caka@example.com",
+      "password": "hashed_password_placeholder",
+      "nama": "Ida Bagus Caka",
+      "tanggal_daftar": "2025-05-06"
+    }
+  ]
+}
