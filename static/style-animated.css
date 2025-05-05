@@ -1,0 +1,29 @@
+body {
+  margin: 0; font-family: 'Segoe UI', sans-serif; background: #0d0d0d; color: #fff;
+}
+.container { width: 90%; max-width: 1200px; margin: auto; }
+.button {
+  background: #00ffd5; color: #000; padding: 10px 22px; border-radius: 6px; font-weight: bold;
+  display: inline-block; margin-top: 15px;
+}
+.button:hover { background: #00c3a0; }
+.main-header { background: #151515; padding: 20px 0; }
+.logo { font-size: 24px; color: #00ffd5; font-weight: bold; }
+nav a { margin-left: 20px; color: #fff; font-weight: 500; }
+.hero-section { background: #111; padding: 80px 0; }
+.hero { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+.hero-img img { max-width: 90%; max-height: 300px; }
+.grid-3 { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.box, .card {
+  background: #1a1a1a; padding: 20px; border-radius: 10px; width: 280px;
+  text-align: center;
+}
+.card.active { border: 2px solid #00ffd5; }
+.card ul { list-style: none; padding: 0; }
+.testimonials blockquote { font-style: italic; color: #ccc; }
+.testimonials cite { color: #00ffd5; margin-top: 10px; display: block; }
+.footer { background: #0e0e0e; padding: 20px; text-align: center; color: #888; }
+
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.visible { opacity: 1 !important; transform: translateY(0) !important; }
