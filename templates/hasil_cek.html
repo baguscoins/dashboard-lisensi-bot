@@ -1,0 +1,8 @@
+<h2>Hasil Cek Lisensi</h2>
+<p>Kode: {{ kode }}</p>
+<p>Status: {{ status }}</p>
+{% if expired %}
+<p>Expired: {{ expired }}</p>
+<p>Owner: {{ owner }}</p>
+{% endif %}
+<a href="/cek-lisensi">Kembali</a>
