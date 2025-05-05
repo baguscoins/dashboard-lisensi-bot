@@ -1,49 +1,109 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BotLisensi All-In-One</title>
-  <link rel="stylesheet" href="/static/style-full.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BotLisensi - Jual Beli Bot Crypto</title>
+  <link rel="stylesheet" href="/static/style-merged.css" />
 </head>
 <body>
 
-<!-- Video Hero -->
-<section class="video-hero">
-  <video autoplay muted loop id="bg-video">
-    <source src="https://cdn.coverr.co/videos/coverr-crypto-keys-1098/1080p.mp4" type="video/mp4">
-  </video>
-  <div class="overlay">
-    <h1 class="typing-text" id="typed-text"></h1>
-    <a href="/cek-lisensi" class="button">Coba Sekarang</a>
+<header class="navbar">
+  <div class="container">
+    <div class="logo">BotLisensi</div>
+    <nav>
+      <a href="#fitur">Fitur</a>
+      <a href="#harga">Harga</a>
+      <a href="#testimoni">Testimoni</a>
+      <a href="/admin" class="btn">Login Admin</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-flex">
+    <div class="hero-text">
+      <h1>Jual Beli Bot Crypto dengan Sistem Lisensi</h1>
+      <p>Kelola bot Anda secara otomatis, aman, dan langsung aktif dengan sistem lisensi pintar.</p>
+      <a href="/cek-lisensi" class="btn large">Coba Sekarang</a>
+    </div>
+    <div class="hero-img">
+      <img src="https://cdn3d.iconscout.com/3d/premium/thumb/crypto-exchange-5790644-4849808.png" alt="Ilustrasi Crypto" />
+    </div>
   </div>
 </section>
 
-<!-- Counter Stats -->
-<section class="stats">
+<section class="features" id="fitur">
   <div class="container">
-    <div class="stat"><span class="count" data-target="3000">0</span><p>Lisensi Aktif</p></div>
-    <div class="stat"><span class="count" data-target="150">0</span><p>Bot Terdaftar</p></div>
-    <div class="stat"><span class="count" data-target="24">0</span><p>Dukungan Jam</p></div>
+    <h2>Fitur Unggulan</h2>
+    <div class="feature-grid">
+      <div class="card">
+        <img src="https://img.icons8.com/color/96/lock--v1.png"/>
+        <h3>Keamanan Tinggi</h3>
+        <p>Sistem enkripsi menjaga lisensi tetap eksklusif & aman.</p>
+      </div>
+      <div class="card">
+        <img src="https://img.icons8.com/color/96/flash-on.png"/>
+        <h3>Instan & Otomatis</h3>
+        <p>Lisensi aktif dalam hitungan detik — tanpa proses manual.</p>
+      </div>
+      <div class="card">
+        <img src="https://img.icons8.com/color/96/customer-support.png"/>
+        <h3>Dukungan 24/7</h3>
+        <p>Tim kami siap bantu Anda kapan pun dibutuhkan.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Countdown Timer -->
-<section class="countdown">
+<section class="pricing" id="harga">
   <div class="container">
-    <h2>Promo Pro Berakhir Dalam:</h2>
-    <div id="timer"></div>
+    <h2>Paket Harga</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Starter</h3>
+        <p class="price">Rp 0</p>
+        <ul>
+          <li>1 lisensi</li>
+          <li>Durasi 3 hari</li>
+          <li>Dukungan komunitas</li>
+        </ul>
+        <a href="/cek-lisensi" class="btn small">Coba</a>
+      </div>
+      <div class="price-card active">
+        <h3>Pro</h3>
+        <p class="price">Rp 99.000</p>
+        <ul>
+          <li>5 lisensi</li>
+          <li>30 hari</li>
+          <li>Live chat support</li>
+        </ul>
+        <a href="#" class="btn small">Beli Sekarang</a>
+      </div>
+      <div class="price-card">
+        <h3>Bisnis</h3>
+        <p class="price">Rp 299.000</p>
+        <ul>
+          <li>Unlimited lisensi</li>
+          <li>90 hari</li>
+          <li>VIP Support</li>
+        </ul>
+        <a href="#" class="btn small">Hubungi Kami</a>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Carousel Testimonial -->
-<section class="carousel">
+<section class="testimoni" id="testimoni">
   <div class="container">
-    <h2>Testimoni</h2>
-    <div class="slider">
-      <div class="slide">"Sistem lisensinya simpel dan powerful!" – Andi</div>
-      <div class="slide">"Saya bisa jualan bot auto langsung aktif!" – Mira</div>
-      <div class="slide">"Support 24 jam responsif banget." – Yoga</div>
+    <h2>Apa Kata Mereka?</h2>
+    <div class="testi-box">
+      <blockquote>"Bot saya langsung bisa dijual ke komunitas, tanpa ribet aktifasi. Luar biasa!"</blockquote>
+      <cite>- Dewa Trader</cite>
+    </div>
+    <div class="testi-box">
+      <blockquote>"Sistemnya sangat aman, dan dukungan teknisnya fast respon banget."</blockquote>
+      <cite>- Nita Crypto</cite>
     </div>
   </div>
 </section>
@@ -54,9 +114,5 @@
   </div>
 </footer>
 
-<script src="/static/typed.js"></script>
-<script src="/static/counter.js"></script>
-<script src="/static/countdown.js"></script>
-<script src="/static/carousel.js"></script>
 </body>
 </html>
