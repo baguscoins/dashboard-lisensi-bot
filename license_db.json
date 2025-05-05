@@ -1,1 +1,3 @@
-{}
+git add license_db.json
+git commit -m "Inisialisasi license_db.json dengan objek kosong"
+git push origin main
