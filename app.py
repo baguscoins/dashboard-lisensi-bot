@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for, session
 import json, os
 from datetime import datetime
@@ -62,8 +63,27 @@ def admin_login():
             return redirect(url_for('admin_dashboard'))
     return render_template('admin_login.html')
 
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
+    if not session.get('admin'):
+        return redirect(url_for('admin_login'))
+    db = load_licenses()
+    reseller_db = load_resellers()
+    total_reseller = len(reseller_db['resellers'])
+    total_lisensi = len(db)
+    aktif = sum(1 for l in db.values() if datetime.strptime(l['expired'], "%Y-%m-%d") >= datetime.today())
+    expired = total_lisensi - aktif
+    total_bot = len(os.listdir('uploaded_bots')) if os.path.exists('uploaded_bots') else 0
+    return render_template('dashboard_admin.html',
+                           licenses=db,
+                           total_reseller=total_reseller,
+                           total_lisensi=total_lisensi,
+                           aktif=aktif,
+                           expired=expired,
+                           total_bot=total_bot,
+                           reseller_list=reseller_db['resellers'])
+
     if not session.get('admin'):
         return redirect(url_for('admin_login'))
     db = load_licenses()
