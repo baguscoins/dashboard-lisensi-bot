@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = 'sUp3r$3cr3t_k3y_2025!!'
 DB_FILE = 'license_db.json'
 ADMIN_USER = 'admin'
 ADMIN_PASS = 'admin123'
