@@ -3,19 +3,21 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import json, os
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'botlisensi_secret_key'
 LICENSE_DB = 'license_db.json'
 RESELLER_DB = 'reseller_db.json'
-ADMIN_USER = 'admin'
-ADMIN_PASS = 'admin123'
+UPLOAD_FOLDER = 'uploaded_bots'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # === LICENSE FUNCTIONS ===
 def load_licenses():
     if not os.path.exists(LICENSE_DB):
         return {}
-    with open(LICENSE_DB, 'r') as f:
+    with open(LICENSE_DB, ' 'r') as f:
         return json.load(f)
 
 def save_licenses(data):
@@ -60,7 +62,7 @@ def cek_lisensi():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        if request.form['username'] == ADMIN_USER and request.form['password'] == ADMIN_PASS:
+        if request.form['username'] == 'admin' and request.form['password'] == 'admin123':
             session['admin'] = True
             return redirect(url_for('admin_dashboard'))
     return render_template('admin_login.html')
@@ -135,34 +137,47 @@ def login_reseller():
             error = "Akun tidak ditemukan."
     return render_template('login_reseller.html', error=error)
 
-@app.route('/profil-reseller', methods=['GET', 'POST'])
+@app.route('/profil-reseller', methods=['GET'])
 def profil_reseller():
     if 'reseller' not in session:
         return redirect(url_for('login_reseller'))
-    db = load_resellers()
+
     user = session['reseller']
-    success, error = None, None
-    if request.method == 'POST':
-        action = request.form.get('action')
-        for r in db['resellers']:
-            if r['username'] == user['username']:
-                if action == "update":
-                    r['nama'] = request.form['nama']
-                    r['username'] = request.form['username']
-                    r['email'] = request.form['email']
-                    success = "Profil berhasil diperbarui."
-                    session['reseller'] = r
-                elif action == "reset_password":
-                    new_pw = request.form['new_password']
-                    confirm_pw = request.form['confirm_password']
-                    if new_pw == confirm_pw:
-                        r['password'] = generate_password_hash(new_pw)
-                        success = "Password berhasil diubah."
-                    else:
-                        error = "Password tidak cocok."
-                break
-        save_resellers(db)
-    return render_template('profil_reseller.html', user=session['reseller'], success=success, error=error)
+    reseller_lisensi = {}
+    all_licenses = load_licenses()
+    aktif, expired = 0, 0
+
+    for kode, data in all_licenses.items():
+        if data['owner'] == user['username']:
+            expired_date = datetime.strptime(data['expired'], "%Y-%m-%d")
+            if expired_date >= datetime.today():
+                status = "aktif"
+                aktif += 1
+            else:
+                status = "expired"
+                expired += 1
+            reseller_lisensi[kode] = {
+                "expired": data['expired'],
+                "status": status
+            }
+
+    stats = {"total": aktif + expired, "aktif": aktif, "expired": expired}
+    uploaded = request.args.get("uploaded")
+    return render_template("dashboard_reseller.html", user=user, stats=stats, lisensi=reseller_lisensi, uploaded=uploaded)
+
+@app.route('/upload-bot', methods=['POST'])
+def upload_bot():
+    if 'reseller' not in session:
+        return redirect(url_for('login_reseller'))
+    if 'bot_file' not in request.files:
+        return redirect(url_for('profil_reseller'))
+    file = request.files['bot_file']
+    if file and file.filename.endswith(".zip"):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(filepath)
+        return redirect(url_for('profil_reseller', uploaded=filename))
+    return redirect(url_for('profil_reseller'))
 
 @app.route('/logout-reseller')
 def logout_reseller():
